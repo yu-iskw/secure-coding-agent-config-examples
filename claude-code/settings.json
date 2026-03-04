@@ -1,0 +1,36 @@
+{
+  "sandbox": {
+    "_comment_enabled": "Enables the sandboxing runtime (Seatbelt/Bubblewrap).",
+    "enabled": true,
+
+    "_comment_allowUnsandboxedCommands": "Disables the escape hatch. If a command fails inside the sandbox, Claude Code might normally attempt to retry it. Setting this to false ensures that all commands must run sandboxed.",
+    "allowUnsandboxedCommands": false,
+
+    "filesystem": {
+      "_comment_denyWrite": "Explicitly blocks write access to sensitive configuration files to prevent persistence mechanisms.",
+      "denyWrite": [
+        "~/.bashrc",
+        "~/.zshrc",
+        "//bin",
+        "//usr/bin",
+        "//etc",
+        "~/.ssh"
+      ],
+
+      "_comment_denyRead": "Blocks read access to sensitive directories like ~/.ssh to prevent credential exfiltration.",
+      "denyRead": [
+        "~/.ssh"
+      ]
+    },
+
+    "network": {
+      "_comment_allowedDomains": "Creates an explicit allowlist for network access, severely limiting an attacker's ability to exfiltrate data.",
+      "allowedDomains": [
+        "github.com",
+        "api.github.com",
+        "registry.npmjs.org",
+        "pypi.org"
+      ]
+    }
+  }
+}
