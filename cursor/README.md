@@ -61,7 +61,6 @@ This script parses the command the LLM intends to run and strictly blocks it (by
 
 ### Strict Mode Alternative
 
-
 If you do not want to use the sandbox feature, or if you are using a model that doesn't fully support sandboxing yet, you can configure Cursor to fall back on strict manual approvals:
 
 - Under Cursor Agent settings, select **Ask Every Time**.

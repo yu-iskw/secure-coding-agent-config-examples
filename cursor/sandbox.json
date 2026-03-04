@@ -21,8 +21,6 @@
       "api.github.com",
       "*.githubusercontent.com"
     ],
-    "deny": [
-      "*.internal.corp.example.com"
-    ]
+    "deny": ["*.internal.corp.example.com"]
   }
 }

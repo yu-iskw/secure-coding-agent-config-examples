@@ -1,0 +1,1 @@
+/Users/yu/local/src/github/coding-agent-configs/claude-code/hooks/gh-safeguard.sh
