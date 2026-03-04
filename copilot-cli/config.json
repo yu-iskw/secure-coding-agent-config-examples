@@ -1,4 +1,8 @@
 {
   "_comment": "Configuration file for GitHub Copilot CLI. Place this in ~/.copilot/config.json",
-  "trusted_folders": ["/home/testuser/app", "/workspace", "/home/agent/projects"]
+  "trusted_folders": [
+    "/home/testuser/app",
+    "/workspace",
+    "/home/agent/projects"
+  ]
 }

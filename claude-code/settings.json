@@ -33,12 +33,7 @@
       ],
 
       "_comment_denyRead": "Blocks read access to sensitive directories like ~/.ssh and cloud credentials to prevent exfiltration.",
-      "denyRead": [
-        "~/.ssh",
-        "~/.aws/credentials",
-        "~/.gcp",
-        "~/.config/gcloud"
-      ]
+      "denyRead": ["~/.ssh", "~/.aws/credentials", "~/.gcp", "~/.config/gcloud"]
     },
 
     "network": {
