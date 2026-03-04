@@ -31,6 +31,16 @@ Even with these settings, you maintain control. Because the `approval_policy` is
 
 **Never** use the `--dangerously-bypass-approvals-and-sandbox` or `--yolo` flags unless you are in a completely isolated, disposable environment (like a dedicated, untrusted Docker container).
 
+## Verification
+
+To verify that Codex is correctly configured and respects the sandbox settings, you can use the repository's integration test suite:
+
+```bash
+make test-integration
+```
+
+This will run an automated probe to ensure that a command like `codex exec 'gh repo create'` is intercepted by the security configuration.
+
 ## References
 
 - [Official Codex Security Documentation](https://developers.openai.com/codex/security/)

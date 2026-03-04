@@ -32,6 +32,16 @@ See the example [`config.json`](config.json):
 
 **WARNING:** Never add `/` or `~` to the `trusted_folders` array. Doing so will allow an attacker's script to execute destructive commands anywhere on your system without your approval.
 
+## Verification
+
+To verify that the Copilot CLI is correctly configured and respects the trusted folders, you can use the repository's integration test suite:
+
+```bash
+make test-integration
+```
+
+This will confirm that the configuration is valid and correctly registers the designated trusted folders in the container environment.
+
 ## References
 
 - [Docker Docs: Copilot sandbox](https://docs.docker.com/ai/sandboxes/agents/copilot/)

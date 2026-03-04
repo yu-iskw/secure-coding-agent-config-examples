@@ -48,6 +48,16 @@ If you operate in highly sensitive environments, you can enforce maximum protect
 
 If an agent command legitimately requires network access or file system access outside the sandbox, you can configure it via the **Request Review** mode. This ensures that a human is in the loop before any potentially dangerous action occurs.
 
+## Verification
+
+To verify that Antigravity is correctly configured and that the sandbox is active, you can use the repository's integration test suite:
+
+```bash
+make test-integration
+```
+
+This will run an automated probe to ensure that the security configuration correctly registers and is effective against unauthorized probes.
+
 ## References
 
 - [Official Google Antigravity Sandboxing Documentation](https://antigravity.google/docs/sandbox-mode)

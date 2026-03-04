@@ -39,6 +39,16 @@ This script parses the command the LLM intends to run and strictly blocks (Exit 
 
 **Repository Pinning**: This hook also blocks the `-R` and `--repo` flags (and explicit API paths like `repos/owner/repo`). This forces the `gh` CLI to use the local workspace context, effectively "pinning" the agent to the current repository and preventing it from pushing data to external, attacker-controlled repositories.
 
+## Verification
+
+To verify that the Gemini CLI is correctly configured and that the `gh-safeguard.sh` hook is active, you can use the repository's integration test suite:
+
+```bash
+make test-integration
+```
+
+This will run an automated probe to ensure that a command like `gemini prompt 'gh repo create'` is successfully blocked.
+
 ## Sandboxing Modes
 
 Depending on your platform and setup, the Gemini CLI uses different sandboxing methods:

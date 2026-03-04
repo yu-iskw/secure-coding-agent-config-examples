@@ -27,3 +27,7 @@ activate-copilot:
 
 activate-antigravity:
 	./scripts/activate-configs.sh --antigravity
+
+test-integration:
+	timeout 600s docker build -t coding-agent-configs-itest -f integration_tests/Dockerfile .
+	docker run --rm -v $(PWD):/home/testuser/app coding-agent-configs-itest
