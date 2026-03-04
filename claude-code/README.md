@@ -21,7 +21,9 @@ Key security settings include:
 
 - **`"enabled": true`**: Activates the sandboxing runtime. All bash commands and subprocesses will be constrained by the sandbox.
 - **`"allowUnsandboxedCommands": false`**: Disables the escape hatch. If a command fails inside the sandbox, Claude Code might normally attempt to retry it with the `dangerouslyDisableSandbox` parameter. Setting this to `false` ensures that all commands must run sandboxed or be explicitly whitelisted.
-- **`filesystem.denyWrite` and `denyRead`**: explicitly blocks access to sensitive directories like `~/.ssh` and configuration files (`~/.bashrc`, `~/.zshrc`) to prevent unauthorized credential access or persistence mechanisms.
+- **`filesystem.denyWrite` and `denyRead`**: explicitly blocks access to sensitive directories like `~/.ssh`, cloud credentials (`~/.aws/credentials`, `~/.gcp`, `~/.config/gcloud`), and configuration files (`~/.bashrc`, `~/.zshrc`) to prevent unauthorized credential access or persistence mechanisms.
+- **`permissions.deny`**: Excludes sensitive files (e.g., `.env`, `secrets/**`, cloud configs) from being accessed by any of Claude Code's tools, including file read and search tools.
+- **`alwaysThinkingEnabled: true`**: Ensures Claude uses its full reasoning capability for complex security tasks.
 - **`network.allowedDomains`**: Creates an explicit allowlist for network access. Any connection attempt to a domain not on this list will be blocked by the proxy, severely limiting the attacker's ability to exfiltrate data.
 
 ## Granular Security Hooks

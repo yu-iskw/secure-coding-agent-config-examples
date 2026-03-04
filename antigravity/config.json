@@ -32,7 +32,14 @@
     "**/*.pem",
     "**/.secrets/**",
     "**/*.bak",
-    "**/*.backup"
+    "**/*.backup",
+    "~/.ssh/**",
+    "~/.aws/credentials",
+    "~/.gcp/**",
+    "~/.config/gcloud/**",
+    "//bin/**",
+    "//usr/bin/**",
+    "//etc/**"
   ],
   "sandbox": {
     "enabled": true,
