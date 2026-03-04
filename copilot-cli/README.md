@@ -12,26 +12,27 @@ The `--yolo` flag is particularly dangerous because it bypasses Copilot's standa
 ## The Mitigation
 
 ### 1. Use Docker Sandboxes
+
 Instead of running Copilot CLI directly on your host operating system, run it inside a Docker container. This ensures that even if an attacker manages to invoke the `--yolo` command, the agent's "blast radius" is limited entirely to the container and the specific project directory you have mounted.
 
-* Never mount your root directory `/` or your home directory `~` to the Docker Sandbox.
-* Only mount the specific workspace directory you are actively working on (e.g., `/workspace`).
+- Never mount your root directory `/` or your home directory `~` to the Docker Sandbox.
+- Only mount the specific workspace directory you are actively working on (e.g., `/workspace`).
 
 ### 2. Configure Trusted Folders Carefully
-If you must run Copilot CLI locally, you can define `trusted_folders` in `~/.copilot/config.json` to disable safety prompts *only* for specific directories.
+
+If you must run Copilot CLI locally, you can define `trusted_folders` in `~/.copilot/config.json` to disable safety prompts _only_ for specific directories.
 
 See the example [`config.json`](config.json):
+
 ```json
 {
-  "trusted_folders": [
-    "/workspace",
-    "/home/agent/projects"
-  ]
+  "trusted_folders": ["/workspace", "/home/agent/projects"]
 }
 ```
 
 **WARNING:** Never add `/` or `~` to the `trusted_folders` array. Doing so will allow an attacker's script to execute destructive commands anywhere on your system without your approval.
 
 ## References
-* [Docker Docs: Copilot sandbox](https://docs.docker.com/ai/sandboxes/agents/copilot/)
-* [Socket.dev Threat Report on Unauthorized AI Agent Execution](https://socket.dev/blog/unauthorized-ai-agent-execution-code-published-to-openvsx-in-aqua-trivy-vs-code-extension)
+
+- [Docker Docs: Copilot sandbox](https://docs.docker.com/ai/sandboxes/agents/copilot/)
+- [Socket.dev Threat Report on Unauthorized AI Agent Execution](https://socket.dev/blog/unauthorized-ai-agent-execution-code-published-to-openvsx-in-aqua-trivy-vs-code-extension)

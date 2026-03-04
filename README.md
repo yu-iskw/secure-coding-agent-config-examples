@@ -37,4 +37,41 @@ We have compiled beginner-friendly configuration files, setup instructions, and 
 - [Antigravity](./antigravity/README.md) - Enable Strict Mode and terminal sandboxing.
 - [GitHub Copilot CLI](./copilot-cli/README.md) - Utilize Docker sandboxing and restrict trusted folders.
 
-Each directory contains documented configuration templates (where applicable) and a `README.md` explaining the *why* and *how* behind each security setting.
+Each directory contains documented configuration templates (where applicable) and a `README.md` explaining the _why_ and _how_ behind each security setting.
+
+## Quick Setup (Activation)
+
+To quickly activate the security configurations in this repository for your local environment, you can use the provided `make` targets. This will symlink the configuration files to your local hidden directories (e.g., `.claude/`, `.cursor/`).
+
+### Prerequisites
+
+- `make` installed.
+- Repository cloned to your local project directory.
+
+### Commands
+
+Activate all supported agent configurations at once:
+
+```bash
+make activate
+```
+
+Or activate configurations for a specific agent:
+
+```bash
+make activate-claude
+make activate-cursor
+make activate-gemini
+# etc.
+```
+
+To see a list of available targets, check the [Makefile](./Makefile).
+
+### Verification
+
+You can verify the activations by checking for the presence of symlinks in your local hidden directories:
+
+```bash
+ls -l .claude/settings.json
+ls -l .cursor/sandbox.json
+```

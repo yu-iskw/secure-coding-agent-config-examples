@@ -19,19 +19,36 @@ Copy the provided [`settings.json`](settings.json) to your configuration file pa
 
 Key security settings include:
 
-* **`"sandbox": true`**: Activates the sandboxing runtime. All operations performed by the Gemini CLI will be constrained by the sandbox, preventing unrestricted writes outside the project directory.
+- **`"sandbox": true`**: Activates the sandboxing runtime. All operations performed by the Gemini CLI will be constrained by the sandbox, preventing unrestricted writes outside the project directory.
 
 Alternatively, you can enable sandboxing via environment variables (`GEMINI_SANDBOX=true` or `GEMINI_SANDBOX=docker`) or with the `-s` command flag.
+
+## Granular Security Hooks
+
+While sandboxing prevents arbitrary file writes, it doesn't prevent an attacker from using an already authenticated CLI tool (like `gh` or `curl`) to exfiltrate data from within the sandbox.
+
+To address this, we use **BeforeTool Hooks** to intercept commands before they are executed by the shell.
+
+### How to use the `gh-safeguard.sh` hook
+
+1. Copy the `hooks/gh-safeguard.sh` script to your project's `.gemini/hooks/` directory.
+2. Make the script executable: `chmod +x .gemini/hooks/gh-safeguard.sh`
+3. Ensure your `settings.json` includes the `hooks` configuration provided in our example, which registers this script to run before any shell execution tool.
+
+This script parses the command the LLM intends to run and strictly blocks (Exit Code 2) known data exfiltration commands like `gh repo create` or `gh gist create`, while allowing safe querying commands to proceed.
+
+**Repository Pinning**: This hook also blocks the `-R` and `--repo` flags (and explicit API paths like `repos/owner/repo`). This forces the `gh` CLI to use the local workspace context, effectively "pinning" the agent to the current repository and preventing it from pushing data to external, attacker-controlled repositories.
 
 ## Sandboxing Modes
 
 Depending on your platform and setup, the Gemini CLI uses different sandboxing methods:
 
-* **macOS Seatbelt**: The default profile (`permissive-open`) restricts writes outside the project directory but allows most other operations.
-* **Docker/Podman**: Cross-platform sandboxing with complete process isolation. Use `GEMINI_SANDBOX=docker` if you prefer container-based isolation.
+- **macOS Seatbelt**: The default profile (`permissive-open`) restricts writes outside the project directory but allows most other operations.
+- **Docker/Podman**: Cross-platform sandboxing with complete process isolation. Use `GEMINI_SANDBOX=docker` if you prefer container-based isolation.
 
 Even when sandboxing is enabled, GUI applications may not work properly, and network traffic may still be allowed depending on the sandbox profile used.
 
 ## References
-* [Official Gemini CLI Sandboxing Documentation](https://geminicli.com/docs/cli/sandbox/)
-* [Socket.dev Threat Report on Unauthorized AI Agent Execution](https://socket.dev/blog/unauthorized-ai-agent-execution-code-published-to-openvsx-in-aqua-trivy-vs-code-extension)
+
+- [Official Gemini CLI Sandboxing Documentation](https://geminicli.com/docs/cli/sandbox/)
+- [Socket.dev Threat Report on Unauthorized AI Agent Execution](https://socket.dev/blog/unauthorized-ai-agent-execution-code-published-to-openvsx-in-aqua-trivy-vs-code-extension)

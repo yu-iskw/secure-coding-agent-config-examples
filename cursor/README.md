@@ -17,11 +17,11 @@ To securely configure the Cursor Agent, follow these steps:
 1. Open **Cursor Settings**.
 2. Navigate to the **Agent** tab (under Features) -> **Auto-Run**.
 3. Ensure **Auto-Run Mode** is set to **Run in Sandbox**.
-   * *What this does:* It enforces strong, OS-level sandboxing (macOS Seatbelt or Linux Landlock). The agent can only read/write to your open workspace and `/tmp`. It cannot write to other directories or access `cursorignore`'d files.
+   - _What this does:_ It enforces strong, OS-level sandboxing (macOS Seatbelt or Linux Landlock). The agent can only read/write to your open workspace and `/tmp`. It cannot write to other directories or access `cursorignore`'d files.
 4. Set the **Auto-run network access** toggle to **sandbox.json Only**.
-   * *What this does:* When set to this mode, the agent cannot access the network except for domains explicitly allowed in your `sandbox.json` file. This prevents the agent from exfiltrating data to attacker-controlled servers.
+   - _What this does:_ When set to this mode, the agent cannot access the network except for domains explicitly allowed in your `sandbox.json` file. This prevents the agent from exfiltrating data to attacker-controlled servers.
 5. Set **External-File Protection** to **On**.
-   * *What this does:* Prevents the agent from creating or modifying files outside of the workspace automatically.
+   - _What this does:_ Prevents the agent from creating or modifying files outside of the workspace automatically.
 
 ### Configuring Network Access (`sandbox.json`)
 
@@ -29,17 +29,44 @@ Cursor 2.5 introduced granular network access controls via `sandbox.json`. Place
 
 Key security settings include:
 
-* **`"networkPolicy": { "default": "deny" }`**: Explicitly denies all outbound network traffic from the sandbox unless it matches a pattern in the allowlist.
-* **`"allow": [...]`**: A strict allowlist of necessary domains, such as package registries (npm, PyPI, Go, Crates, etc.) and GitHub. Only these domains are reachable.
-* **`"deny": [...]`**: You can explicitly block access to internal corporate services or specific IPs to prevent Server-Side Request Forgery (SSRF) attacks or internal reconnaissance.
+- **`"networkPolicy": { "default": "deny" }`**: Explicitly denies all outbound network traffic from the sandbox unless it matches a pattern in the allowlist.
+- **`"allow": [...]`**: A strict allowlist of necessary domains, such as package registries (npm, PyPI, Go, Crates, etc.) and GitHub. Only these domains are reachable.
+- **`"deny": [...]`**: You can explicitly block access to internal corporate services or specific IPs to prevent Server-Side Request Forgery (SSRF) attacks or internal reconnaissance.
+
+### Granular Rule-Based Restrictions (`.cursor/rules`)
+
+While network restrictions can block traffic to unknown domains, they might still allow traffic to necessary domains like `github.com`. An attacker could exploit this by having the agent use the authenticated `gh` CLI to publish data to a public repository or gist.
+
+To prevent this, you can provide explicit context rules to the AI agent.
+
+Copy the `rules/security-cli-constraints.mdc` file to your project's `.cursor/rules/` directory. This rule explicitly forbids the agent from executing commands like `gh repo create` or `gh gist create`, ensuring it only uses the CLI for safe query operations.
+
+### Granular Security Hooks (`.cursor/hooks.json`)
+
+Cursor Hooks let you observe, control, and extend the agent loop using custom scripts. They run before or after defined stages of the agent loop and can observe, block, or modify behavior.
+
+While rules (`.cursor/rules`) guide the AI's behavior, they are not a hard enforcement mechanism. An AI can still hallucinate or be tricked into ignoring a rule. **Hooks provide hard enforcement.**
+
+To address this, we use the **`beforeShellExecution`** hook to intercept commands before they are executed by the shell.
+
+#### How to use the `gh-safeguard.sh` hook
+
+1. Copy the `hooks/gh-safeguard.sh` script to your project's `.cursor/hooks/` directory.
+2. Make the script executable: `chmod +x .cursor/hooks/gh-safeguard.sh`
+3. Copy the `hooks.json` file to your project's `.cursor/` directory (`.cursor/hooks.json`). This registers the script to run before any shell execution that starts with `gh`.
+
+This script parses the command the LLM intends to run and strictly blocks it (by returning `{"permission": "deny"}`) if it contains known data exfiltration commands like `gh repo create` or `gh gist create`, while allowing safe querying commands to proceed.
+
+**Repository Pinning**: This hook also blocks the `-R` and `--repo` flags (and explicit API paths like `repos/owner/repo`). This forces the `gh` CLI to use the local workspace context, effectively "pinning" the agent to the current repository and preventing it from pushing data to external, attacker-controlled repositories.
 
 ### Strict Mode Alternative
 
 If you do not want to use the sandbox feature, or if you are using a model that doesn't fully support sandboxing yet, you can configure Cursor to fall back on strict manual approvals:
 
-* Under Cursor Agent settings, select **Ask Every Time**.
-   * *What this does:* Cursor will pause and ask for your explicit manual approval before executing *any* command in the terminal.
+- Under Cursor Agent settings, select **Ask Every Time**.
+  - _What this does:_ Cursor will pause and ask for your explicit manual approval before executing _any_ command in the terminal.
 
 ## References
-* [Cursor 2.0 Agent Sandboxing Announcement](https://forum.cursor.com/t/agent-sandboxing-available-in-cursor-2-0/139449)
-* [Socket.dev Threat Report on Unauthorized AI Agent Execution](https://socket.dev/blog/unauthorized-ai-agent-execution-code-published-to-openvsx-in-aqua-trivy-vs-code-extension)
+
+- [Cursor 2.0 Agent Sandboxing Announcement](https://forum.cursor.com/t/agent-sandboxing-available-in-cursor-2-0/139449)
+- [Socket.dev Threat Report on Unauthorized AI Agent Execution](https://socket.dev/blog/unauthorized-ai-agent-execution-code-published-to-openvsx-in-aqua-trivy-vs-code-extension)

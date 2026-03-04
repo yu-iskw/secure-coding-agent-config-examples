@@ -1,0 +1,1 @@
+/Users/yu/local/src/github/coding-agent-configs/gemini-cli/hooks/gh-safeguard.sh

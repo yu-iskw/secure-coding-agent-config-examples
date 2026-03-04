@@ -14,16 +14,20 @@ Periodically research the latest security best practices, documentation, and vul
 ## Instructions
 
 1. **Read References**: Read the file `references/documentation-urls.md` to get the list of official documentation links for each AI coding agent.
-2. **Fetch Latest Docs**: For each tool, use `WebSearch` or `WebFetch` to gather the latest sandbox and security settings from the official URLs.
+2. **Fetch Latest Docs & Traverse Links**:
+   - For each tool, use `WebFetch` to gather the documentation from the official URLs.
+   - **CRITICAL**: Do not just read the main pages. Treat the URLs in `documentation-urls.md` as entry points or index pages.
+   - When reading an index page, identify links to sub-pages (e.g., specific rules, permissions, reference guides, advanced configurations).
+   - Use `WebFetch` to systematically traverse and read these sub-page links to ensure you have a complete and deep understanding of all new settings, hooks, and security properties before moving to the next step.
 3. **Search for Vulnerabilities**: Use `WebSearch` to search for recent security vulnerabilities related to these agents (e.g., search terms like `"AI agent sandbox escape [Current Year]"` or `"[Agent Name] security vulnerability"`).
 4. **Compare Configurations**: Compare the newly gathered information with the current local configuration files (e.g., `cursor/sandbox.json`, `claude-code/settings.json`, `codex/config.toml`, etc.). Look for:
-    * New settings or flags that should be enabled.
-    * Deprecated settings that should be removed.
-    * New default bypasses or exploits that need explicitly mitigating.
+   - New settings or flags that should be enabled.
+   - Deprecated settings that should be removed.
+   - New default bypasses or exploits that need explicitly mitigating.
 5. **Apply Updates**:
-    * Modify the configuration files to implement the latest secure-by-default practices.
-    * Update the inline comments in the configuration files to explain the changes.
-    * Update the respective `README.md` files in each agent's directory to reflect the new instructions or threat landscape.
+   - Modify the configuration files to implement the latest secure-by-default practices.
+   - Update the inline comments in the configuration files to explain the changes.
+   - Update the respective `README.md` files in each agent's directory to reflect the new instructions or threat landscape.
 
 ## Examples
 
@@ -32,12 +36,14 @@ Periodically research the latest security best practices, documentation, and vul
 **Input**: "Please update the agent configs."
 **Execution**:
 
-* Agent reads `references/documentation-urls.md`.
-* Agent fetches `https://cursor.com/docs/agent/terminal`.
-* Agent discovers a new property `restrictSubprocesses` added to `sandbox.json` in a recent update.
-* Agent updates `cursor/sandbox.json` to include `"restrictSubprocesses": true`.
-* Agent updates `cursor/README.md` to document the new property and how it mitigates attacks.
+- Agent reads `references/documentation-urls.md`.
+- Agent uses `WebFetch` to read `https://cursor.com/docs/agent/security` and `https://cursor.com/docs/agent/hooks`.
+- Agent notices sub-page links related to advanced sandboxing properties in the fetched content.
+- Agent uses `WebFetch` to follow those links and thoroughly reads the nested sandbox reference.
+- Agent discovers a new property `restrictSubprocesses` added to `sandbox.json` in a recent update.
+- Agent updates `cursor/sandbox.json` to include `"restrictSubprocesses": true`.
+- Agent updates `cursor/README.md` to document the new property and how it mitigates attacks.
 
 ## Additional Resources
 
-* [Documentation URLs](references/documentation-urls.md)
+- [Documentation URLs](references/documentation-urls.md)

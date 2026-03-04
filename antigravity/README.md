@@ -21,13 +21,13 @@ To securely configure the Antigravity Agent, copy the provided `config.json` fil
 
 This configuration file implements several key security measures:
 
-* **Strict Sandbox**: `sandbox.enabled: true` ensures the agent operates within defined limits.
-* **Granular Permissions**:
-  * `permissions.fileWrite: "prompt"` ensures the agent cannot silently modify or delete files without your explicit approval.
-  * `permissions.networkAccess: "localhost-only"` blocks the agent from sending your data to external servers or downloading untrusted code.
-  * `permissions.systemCommands: "blocked"` prevents the execution of arbitrary system-level commands.
-* **Protected Paths**: The `protectedPaths` array explicitly denies access to sensitive locations like `.git`, `.env`, and credential files, preventing accidental or malicious modification.
-* **Audit Logging**: `audit.enabled: true` and `audit.backupBeforeChanges: true` ensure that all actions are logged and backups are kept before any modifications occur.
+- **Strict Sandbox**: `sandbox.enabled: true` ensures the agent operates within defined limits.
+- **Granular Permissions**:
+  - `permissions.fileWrite: "prompt"` ensures the agent cannot silently modify or delete files without your explicit approval.
+  - `permissions.networkAccess: "localhost-only"` blocks the agent from sending your data to external servers or downloading untrusted code.
+  - `permissions.systemCommands: "blocked"` prevents the execution of arbitrary system-level commands.
+- **Protected Paths**: The `protectedPaths` array explicitly denies access to sensitive locations like `.git`, `.env`, and credential files, preventing accidental or malicious modification.
+- **Audit Logging**: `audit.enabled: true` and `audit.backupBeforeChanges: true` ensure that all actions are logged and backups are kept before any modifications occur.
 
 ### Global UI Settings (Optional)
 
@@ -41,13 +41,14 @@ In addition to the project-level `.antigravity/config.json`, you can also enforc
 
 If you operate in highly sensitive environments, you can enforce maximum protection:
 
-* Toggle **Strict Mode** in Antigravity User Settings.
-   * *What this does:* When strict mode is enabled, sandboxing is automatically activated with network access denied. This ensures maximum protection when operating in a strict environment, overriding any individual sandbox toggles.
+- Toggle **Strict Mode** in Antigravity User Settings.
+  - _What this does:_ When strict mode is enabled, sandboxing is automatically activated with network access denied, and it forces a manual user prompt before any shell execution. This effectively mitigates advanced exfiltration techniques using tools like the `gh` CLI because a human must review every command.
 
 ### Handling Sandbox Violations
 
 If an agent command legitimately requires network access or file system access outside the sandbox, you can configure it via the **Request Review** mode. This ensures that a human is in the loop before any potentially dangerous action occurs.
 
 ## References
-* [Official Google Antigravity Sandboxing Documentation](https://antigravity.google/docs/sandbox-mode)
-* [Socket.dev Threat Report on Unauthorized AI Agent Execution](https://socket.dev/blog/unauthorized-ai-agent-execution-code-published-to-openvsx-in-aqua-trivy-vs-code-extension)
+
+- [Official Google Antigravity Sandboxing Documentation](https://antigravity.google/docs/sandbox-mode)
+- [Socket.dev Threat Report on Unauthorized AI Agent Execution](https://socket.dev/blog/unauthorized-ai-agent-execution-code-published-to-openvsx-in-aqua-trivy-vs-code-extension)
