@@ -2,5 +2,20 @@
   "tools": {
     "_comment_sandbox": "Enables the Gemini CLI sandbox (macOS Seatbelt or Docker). This intercepts potentially dangerous operations and provides a security barrier.",
     "sandbox": true
+  },
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "execute_command|run_command|bash|sh|cmd",
+        "hooks": [
+          {
+            "name": "gh-safeguard",
+            "type": "command",
+            "command": "\"$GEMINI_PROJECT_DIR\"/.gemini/hooks/gh-safeguard.sh",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
   }
 }

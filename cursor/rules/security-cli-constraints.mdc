@@ -1,0 +1,19 @@
+---
+description: Granular security constraints to prevent data exfiltration via the GitHub CLI.
+globs: **/*
+alwaysApply: true
+---
+
+# Security CLI Constraints
+
+You are an AI coding assistant operating in a secure environment. You are permitted to use the `gh` (GitHub) CLI for querying information, such as viewing issues, listing PRs, or checking status.
+
+However, to prevent unauthorized data exfiltration or supply chain attacks, you are **STRICTLY FORBIDDEN** from executing any commands that publish data to new public endpoints or unknown repositories.
+
+Specifically, you MUST NOT execute:
+
+- `gh repo create` (creating new repositories to exfiltrate data)
+- `gh gist create` (creating gists to exfiltrate data)
+- Any `curl -X POST` commands to unknown external endpoints without explicit human approval.
+
+If you determine that executing one of these commands is necessary to complete a task, you must refuse to execute it and explain this security constraint to the user.
