@@ -1,15 +1,11 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "weekly"
-    groups:
-      github-actions:
-        patterns:
-          - "*"
+      interval: monthly
 
-  - package-ecosystem: "docker"
-    directory: "/integration_tests"
+  - package-ecosystem: docker
+    directory: /integration_tests
     schedule:
-      interval: "weekly"
+      interval: monthly
