@@ -30,13 +30,15 @@ While network domain restrictions (e.g., allowing `github.com`) are essential, t
 
 To address this, we use **PreToolUse Hooks** to intercept commands before they are executed by the shell.
 
-### How to use the `gh-safeguard.sh` hook:
+### How to use the `gh-safeguard.sh` hook
 
 1. Copy the `hooks/gh-safeguard.sh` script to your project's `.claude/hooks/` directory.
 2. Make the script executable: `chmod +x .claude/hooks/gh-safeguard.sh`
 3. Ensure your `settings.json` includes the `hooks` configuration provided in our example, which registers this script to run before any `Bash` tool usage.
 
 This script parses the command the LLM intends to run and strictly blocks (Exit Code 2) known data exfiltration commands like `gh repo create` or `gh gist create`, while allowing safe querying commands to proceed.
+
+**Repository Pinning**: This hook also blocks the `-R` and `--repo` flags (and explicit API paths like `repos/owner/repo`). This forces the `gh` CLI to use the local workspace context, effectively "pinning" the agent to the current repository and preventing it from pushing data to external, attacker-controlled repositories.
 
 ## Important Considerations
 

@@ -5,12 +5,15 @@
 INPUT=$(cat)
 
 # Extract the command to be executed (handles Gemini CLI and general schemas)
-COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .command // .args.command // empty')
+COMMAND=$(echo "${INPUT}" | jq -r '.tool_input.command // .command // .args.command // empty')
 
-# Check for dangerous exfiltration patterns
-if echo "$COMMAND" | grep -qE "(gh\s+repo\s+create|gh\s+gist\s+create)"; then
-  echo "Security Block: Execution of 'gh repo create' or 'gh gist create' is STRICTLY FORBIDDEN to prevent unauthorized data exfiltration to public endpoints." >&2
-  exit 2
+# Check for dangerous exfiltration patterns or repository overrides
+if echo "${COMMAND}" | grep -qE "(gh\s+repo\s+create|gh\s+gist\s+create)"; then
+	echo "Security Block: Execution of 'gh repo create' or 'gh gist create' is STRICTLY FORBIDDEN to prevent unauthorized data exfiltration to public endpoints." >&2
+	exit 2
+elif echo "${COMMAND}" | grep -qE "gh .*( -R | --repo |repos\/[^/]+\/[^/]+)"; then
+	echo "Security Block: Repository overrides using -R, --repo, or explicit API paths are FORBIDDEN to prevent data exfiltration. This agent is pinned to the local workspace repository." >&2
+	exit 2
 fi
 
 # Allow execution

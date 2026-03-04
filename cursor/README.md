@@ -41,7 +41,26 @@ To prevent this, you can provide explicit context rules to the AI agent.
 
 Copy the `rules/security-cli-constraints.mdc` file to your project's `.cursor/rules/` directory. This rule explicitly forbids the agent from executing commands like `gh repo create` or `gh gist create`, ensuring it only uses the CLI for safe query operations.
 
+### Granular Security Hooks (`.cursor/hooks.json`)
+
+Cursor Hooks let you observe, control, and extend the agent loop using custom scripts. They run before or after defined stages of the agent loop and can observe, block, or modify behavior.
+
+While rules (`.cursor/rules`) guide the AI's behavior, they are not a hard enforcement mechanism. An AI can still hallucinate or be tricked into ignoring a rule. **Hooks provide hard enforcement.**
+
+To address this, we use the **`beforeShellExecution`** hook to intercept commands before they are executed by the shell.
+
+#### How to use the `gh-safeguard.sh` hook
+
+1. Copy the `hooks/gh-safeguard.sh` script to your project's `.cursor/hooks/` directory.
+2. Make the script executable: `chmod +x .cursor/hooks/gh-safeguard.sh`
+3. Copy the `hooks.json` file to your project's `.cursor/` directory (`.cursor/hooks.json`). This registers the script to run before any shell execution that starts with `gh`.
+
+This script parses the command the LLM intends to run and strictly blocks it (by returning `{"permission": "deny"}`) if it contains known data exfiltration commands like `gh repo create` or `gh gist create`, while allowing safe querying commands to proceed.
+
+**Repository Pinning**: This hook also blocks the `-R` and `--repo` flags (and explicit API paths like `repos/owner/repo`). This forces the `gh` CLI to use the local workspace context, effectively "pinning" the agent to the current repository and preventing it from pushing data to external, attacker-controlled repositories.
+
 ### Strict Mode Alternative
+
 
 If you do not want to use the sandbox feature, or if you are using a model that doesn't fully support sandboxing yet, you can configure Cursor to fall back on strict manual approvals:
 

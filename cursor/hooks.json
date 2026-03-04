@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/gh-safeguard.sh",
+        "matcher": "gh "
+      }
+    ]
+  }
+}
