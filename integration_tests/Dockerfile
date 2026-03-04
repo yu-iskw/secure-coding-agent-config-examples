@@ -1,6 +1,8 @@
 FROM node:22-slim
 
-# Install base dependencies and Cursor/Claude Code native dependencies
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     git \
@@ -19,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install GitHub CLI (gh)
+# hadolint ignore=DL3008
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
     && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
@@ -26,10 +29,13 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | d
     && apt-get install gh -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# Install coding agent CLIs in separate layers for better caching and visibility
-RUN npm install -g @openai/codex
-RUN npm install -g @github/copilot
-RUN npm install -g @google/gemini-cli
+# Install coding agent CLIs
+# hadolint ignore=DL3016
+RUN npm install -g \
+    @openai/codex \
+    @github/copilot \
+    @google/gemini-cli \
+    && npm cache clean --force
 
 # Create a test user
 RUN useradd -m testuser && echo "testuser:testuser" | chpasswd && adduser testuser sudo
@@ -39,11 +45,9 @@ WORKDIR /home/testuser/app
 # Set PATH to include local bin for native installers
 ENV PATH="/home/testuser/.local/bin:${PATH}"
 
-# Install Claude Code via native installer (as testuser)
-RUN curl -fsSL https://claude.ai/install.sh | bash
-
-# Install Cursor agent CLI (as testuser)
-RUN curl -fsSL https://cursor.com/install | bash
+# Install Claude Code and Cursor via native installers (as testuser)
+RUN curl -fsSL https://claude.ai/install.sh | bash \
+    && curl -fsSL https://cursor.com/install | bash
 
 # Copy the verification script (to be created next)
 COPY --chown=testuser:testuser integration_tests/verify.sh ./integration_tests/verify.sh
