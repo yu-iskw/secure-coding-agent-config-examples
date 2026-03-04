@@ -1,0 +1,53 @@
+{
+  "version": "1.0",
+  "environment": "development",
+  "permissions": {
+    "fileWrite": "prompt",
+    "fileRead": "allowed",
+    "terminalAccess": "limited",
+    "networkAccess": "localhost-only",
+    "systemCommands": "blocked"
+  },
+  "allowedCommands": [
+    "npm",
+    "yarn",
+    "pnpm",
+    "git",
+    "python",
+    "pip",
+    "poetry",
+    "node",
+    "cargo",
+    "go",
+    "docker"
+  ],
+  "protectedPaths": [
+    ".git/**",
+    ".env*",
+    "**/*.lock",
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "**/*.key",
+    "**/*.pem",
+    "**/.secrets/**",
+    "**/*.bak",
+    "**/*.backup"
+  ],
+  "sandbox": {
+    "enabled": true,
+    "maxFileChangesPerAction": 10,
+    "requireConfirmationFor": [
+      "file_deletion",
+      "directory_creation",
+      "package_installation",
+      "git_operations"
+    ]
+  },
+  "audit": {
+    "enabled": true,
+    "logLevel": "detailed",
+    "alertOnDangerousOperations": true,
+    "backupBeforeChanges": true
+  }
+}
