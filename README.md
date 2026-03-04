@@ -76,24 +76,6 @@ ls -l .claude/settings.json
 ls -l .cursor/sandbox.json
 ```
 
-## Continuous Verification
+## Contributing
 
-This repository includes a container-based integration test suite to verify that the security configurations are correctly parsed by the latest agent CLIs and that the security hooks (like `gh-safeguard.sh`) effectively block prohibited actions in an isolated environment.
-
-For more details, see the [Integration Tests](./integration_tests/README.md) documentation.
-
-### Running Tests
-
-To run the full integration test suite locally:
-
-```bash
-make test-integration
-```
-
-This will build a Docker image with all supported agent CLIs installed and run a series of "exfiltration probes" to confirm the safeguards are working as intended.
-
-## Agent Skills
-
-We provide specialized Agent Skills to automate the maintenance and verification of these configurations.
-
-- **[Integration Test Fixer](./.claude/skills/integration-test-fixer/SKILL.md)**: Automatically runs the integration tests, analyzes failures using common patterns, and proposes or applies fixes to the configurations or environment.
+For information on how to contribute to this repository, including details on the integration test suite, Agent Skills, and linting guidelines, please see the [CONTRIBUTING.md](./CONTRIBUTING.md) guide.
