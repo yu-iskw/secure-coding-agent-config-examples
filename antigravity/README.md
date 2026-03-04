@@ -26,7 +26,7 @@ This configuration file implements several key security measures:
   - `permissions.fileWrite: "prompt"` ensures the agent cannot silently modify or delete files without your explicit approval.
   - `permissions.networkAccess: "localhost-only"` blocks the agent from sending your data to external servers or downloading untrusted code.
   - `permissions.systemCommands: "blocked"` prevents the execution of arbitrary system-level commands.
-- **Protected Paths**: The `protectedPaths` array explicitly denies access to sensitive locations like `.git`, `.env`, and credential files, preventing accidental or malicious modification.
+- **Protected Paths**: The `protectedPaths` array explicitly denies access to sensitive locations like `.git`, `.env`, cloud credentials (`~/.aws/credentials`, `~/.gcp`, `~/.config/gcloud`), and system configuration directories (`/etc`, `/usr/bin`), preventing accidental or malicious modification.
 - **Audit Logging**: `audit.enabled: true` and `audit.backupBeforeChanges: true` ensure that all actions are logged and backups are kept before any modifications occur.
 
 ### Global UI Settings (Optional)
