@@ -75,24 +75,6 @@ ls -l .claude/settings.json
 ls -l .cursor/sandbox.json
 ```
 
-## 継続的な検証 (Continuous Verification)
+## 貢献 (Contributing)
 
-このリポジトリには、最新のエージェントCLIによってセキュリティ設定が正しく解析されていること、およびセキュリティフック（`gh-safeguard.sh`など）が隔離された環境で禁止されたアクションを効果的にブロックしていることを検証するための、コンテナベースの統合テストスイートが含まれています。
-
-詳細は、[統合テスト](./integration_tests/README.ja.md)のドキュメントを参照してください。
-
-### テストの実行 (Running Tests)
-
-ローカルで完全な統合テストスイートを実行するには：
-
-```bash
-make test-integration
-```
-
-これにより、サポートされているすべてのエージェントCLIがインストールされたDockerイメージがビルドされ、一連の「データ搾取プローブ（exfiltration probes）」が実行され、保護機能が意図通りに動作していることが確認されます。
-
-## エージェントスキル (Agent Skills)
-
-これらの設定の保守と検証を自動化するための専用のAIエージェントスキルを提供しています。
-
-- **[統合テスト修正ツール（Integration Test Fixer）](./.claude/skills/integration-test-fixer/SKILL.md)**: 統合テストを自動的に実行し、一般的なパターンを使用して失敗を分析し、設定や環境への修正を提案または適用します。
+統合テストスイート、AIエージェントスキル、およびリンティングのガイドラインを含む、本リポジトリへの貢献方法については、[CONTRIBUTING.ja.md](./CONTRIBUTING.ja.md) を参照してください。
