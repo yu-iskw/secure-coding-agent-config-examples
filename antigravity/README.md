@@ -22,7 +22,7 @@ To securely configure the Antigravity Agent, copy the provided `config.json` fil
 This configuration file implements several key security measures:
 
 * **Strict Sandbox**: `sandbox.enabled: true` ensures the agent operates within defined limits.
-* **Granular Permissions**: 
+* **Granular Permissions**:
   * `permissions.fileWrite: "prompt"` ensures the agent cannot silently modify or delete files without your explicit approval.
   * `permissions.networkAccess: "localhost-only"` blocks the agent from sending your data to external servers or downloading untrusted code.
   * `permissions.systemCommands: "blocked"` prevents the execution of arbitrary system-level commands.

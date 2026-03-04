@@ -1,0 +1,25 @@
+# Codex Security Configuration
+# Place this file in your ~/.codex/config.toml
+
+# Default sandbox mode. "workspace-write" allows reading files and making edits
+# within the active workspace, but restricts writing outside of it.
+# This prevents malicious extensions from overwriting system files.
+sandbox_mode = "workspace-write"
+
+# Set approval policy to require prompts for untrusted actions.
+# This stops exploits like `--ask-for-approval never` from executing dangerous
+# network access or destructive commands without your explicit consent.
+approval_policy = "untrusted"
+
+# Hardening: Disallow login shells for shell-based tools to reduce the
+# attack surface if the agent attempts to run complex shell startup scripts.
+allow_login_shell = false
+
+# Optional: You can explicitly disable or enable network access for the sandbox.
+# By default in "workspace-write", network access is disabled.
+[sandbox_workspace_write]
+network_access = false
+
+# Ensure the web search tool uses cached results instead of live browsing
+# to reduce exposure to prompt injection from arbitrary live content.
+web_search = "cached"

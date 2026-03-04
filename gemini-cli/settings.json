@@ -1,0 +1,6 @@
+{
+  "tools": {
+    "_comment_sandbox": "Enables the Gemini CLI sandbox (macOS Seatbelt or Docker). This intercepts potentially dangerous operations and provides a security barrier.",
+    "sandbox": true
+  }
+}
